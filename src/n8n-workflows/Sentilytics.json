@@ -1,0 +1,665 @@
+{
+  "name": "Sentilytics",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "feedback",
+        "authentication": "jwtAuth",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -220,
+        -660
+      ],
+      "id": "139c432e-5812-4794-8a2a-984a72e032cc",
+      "name": "Webhook",
+      "webhookId": "3d7ffcfe-e6f2-4d9b-aac3-25b984af855d",
+      "credentials": {
+        "jwtAuth": {
+          "id": "99WIsaju2KIMlmQp",
+          "name": "JWT Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Webhook').item.json.body.email }}",
+        "subject": "Thank you for your feedback!",
+        "message": "=<p>Hi {{$('Webhook').item.json.body.name || 'there'}},</p>\n\n<p>Thank you for your <strong>positive</strong> feedback on the topic: \n<strong>{{$('Supabase- check value of topic id').item.json.name}}</strong>. We’re glad to hear you had a good experience!</p>\n\n<p>We truly appreciate your input and will use it to continue delivering great service.</p>\n\n<p>Best regards,<br>The Team</p>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1696,
+        -760
+      ],
+      "id": "e64b4937-526a-490a-a2bf-333965c6869b",
+      "name": "Positive Email",
+      "webhookId": "fc8de9fe-e5b9-479f-9848-1b42f7809fb7",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "etHzJIZnZUkUdoPK",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Webhook').item.json.body.email }}",
+        "subject": "Thank you for your feedback!",
+        "message": "=<p>Hi {{$('Webhook').item.json.body.name || 'there'}},</p>\n\n<p>Thank you for submitting your feedback on the topic: \n<strong>{{$('Supabase- check value of topic id').item.json.name}}</strong>.</p>\n\n<p>Your input is important to us, and we appreciate you taking the time to share your thoughts. We'll review your feedback to help us improve our services further.</p>\n\n<p>Best regards,<br>The Team</p>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1696,
+        -560
+      ],
+      "id": "57bebeb5-af08-4cab-a640-be7c67f7f72a",
+      "name": "Neutral Email",
+      "webhookId": "ec4ba72b-bb41-45aa-ae50-e836fa07d15e",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "etHzJIZnZUkUdoPK",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Webhook').item.json.body.email }}",
+        "subject": "Thank you for your feedback!",
+        "message": "=<p>Hi {{$('Webhook').item.json.body.name || 'there'}},</p>\n\n<p>Thank you for sharing your feedback on the topic: \n<strong>{{$('Supabase- check value of topic id').item.json.name}}</strong>.</p>\n\n<p>We're sorry to hear that your experience was not ideal. Please know that we take your concerns seriously and will review your feedback carefully to improve our services.</p>\n\n<p>If you’d like to share more details, feel free to reply to this message — we’re here to listen.</p>\n\n<p>Best regards,<br>The Team</p>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1696,
+        -360
+      ],
+      "id": "1d215342-f4e5-41da-9fe9-c7afe20f578b",
+      "name": "Negative Email",
+      "webhookId": "5b9672e0-1a98-4c5d-a785-55a558212063",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "etHzJIZnZUkUdoPK",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "feedback_topics",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "keyValue": "={{ $('Webhook').item.json.body.topic }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        816,
+        -560
+      ],
+      "id": "8fcdccb3-4ca0-4ad3-8c11-745bb477a093",
+      "name": "Supabase- check value of topic id",
+      "credentials": {
+        "supabaseApi": {
+          "id": "Rzg3FYey8A9i14pr",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "feedback",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "name",
+              "fieldValue": "={{ $('Webhook').item.json.body.name }}"
+            },
+            {
+              "fieldId": "email",
+              "fieldValue": "={{ $('Webhook').item.json.body.email }}"
+            },
+            {
+              "fieldId": "topic_id",
+              "fieldValue": "={{ $('Webhook').item.json.body.topic }}"
+            },
+            {
+              "fieldId": "message",
+              "fieldValue": "={{ $('Webhook').item.json.body.message }}"
+            },
+            {
+              "fieldId": "sentiment",
+              "fieldValue": "={{ $('OpenAI- Sentiment analysis').item.json.message.content }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1916,
+        -560
+      ],
+      "id": "bb78bd90-bf25-456d-b4fc-c2257740f589",
+      "name": "Supabase- save data",
+      "credentials": {
+        "supabaseApi": {
+          "id": "Rzg3FYey8A9i14pr",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1WDtzgwZWk2pj5SIujUsDBpLcdqpJHYifx4GkD4hz6QI",
+          "mode": "list",
+          "cachedResultName": "User Feedback",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1WDtzgwZWk2pj5SIujUsDBpLcdqpJHYifx4GkD4hz6QI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1WDtzgwZWk2pj5SIujUsDBpLcdqpJHYifx4GkD4hz6QI/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $('Webhook').item.json.body.name }}",
+            "Email": "={{ $('Webhook').item.json.body.email }}",
+            "Message": "={{ $('Webhook').item.json.body.message }}",
+            "Topic": "={{ $('Supabase- check value of topic id').item.json.name }}",
+            "Sentiment": "={{ $('OpenAI- Sentiment analysis').item.json.message.content }}",
+            "Date Submitted": "={{ $now.format(\"D HH:mm\") }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Topic",
+              "displayName": "Topic",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Message",
+              "displayName": "Message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Sentiment",
+              "displayName": "Sentiment",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Date Submitted",
+              "displayName": "Date Submitted",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        2136,
+        -560
+      ],
+      "id": "84fef76c-0b8d-4342-8da6-d2aac401587e",
+      "name": "Google Sheets- save data",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "q6nzN1lrw9s6jHFr",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are a sentiment analysis engine. Classify the sentiment of the following feedback as strictly Positive, Neutral, or Negative.\nConsider any criticism, dissatisfaction, or negative language as Negative, even if politely worded.\n\nFeedback:\n{{$('Webhook').item.json.body.message}}\n\nRespond with only one word: Positive, Neutral, or Negative."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        440,
+        -560
+      ],
+      "id": "efa72548-d036-4590-b091-e8e29cd0c83e",
+      "name": "OpenAI- Sentiment analysis",
+      "credentials": {
+        "openAiApi": {
+          "id": "a6BfnolBsOs1Vbir",
+          "name": "OpenAi account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "feedback",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "email",
+              "condition": "eq",
+              "keyValue": "={{ $json.body.email }}"
+            },
+            {
+              "keyName": "topic_id",
+              "condition": "eq",
+              "keyValue": "={{ $json.body.topic }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -660
+      ],
+      "id": "e1f55f03-8acd-47a9-a4c0-51a57b49995f",
+      "name": "Supabase- check if email and topic exists",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "Rzg3FYey8A9i14pr",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "64f2e244-985a-4c6d-8d5d-380976aa2142",
+              "leftValue": "={{ $('OpenAI- Sentiment analysis').item.json.message.content }}",
+              "rightValue": "=Positive",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1256,
+        -560
+      ],
+      "id": "dae3b4a9-06a7-4544-9671-0d729bc72617",
+      "name": "If- check if sentiment is positive, neutral or negative",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "6b4e5de5-94c4-46d0-ab20-3f0c825e69f0",
+              "leftValue": "={{ $('OpenAI- Sentiment analysis').item.json.message.content }}",
+              "rightValue": "=Neutral",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1476,
+        -460
+      ],
+      "id": "c4384214-1fe8-4ebf-904b-8e06b16b4909",
+      "name": "If- if sentiment is negative and neutral"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "6ab653ab-0224-40a3-9120-3fa81e648e7f",
+              "leftValue": "={{ $json.id !== undefined }}",
+              "rightValue": {},
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        220,
+        -660
+      ],
+      "id": "2f1e8c42-4fae-4bd8-9d4a-f1b22745e7ef",
+      "name": "If- condition if email and topic exists"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Webhook').item.json.body.email }}",
+        "subject": "Feedback already submitted – thank you!",
+        "message": "=<p>Hi {{$('Webhook').item.json.body.name || 'there'}},</p> <p>It looks like you’ve already submitted feedback for this topic. Thanks for your contribution!</p> <p>Best regards,<br>The Team</p>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        518,
+        -760
+      ],
+      "id": "5819132a-d322-45a7-80e9-ff5564812e93",
+      "name": "Notify client",
+      "webhookId": "5d75663d-9704-4f68-90f7-e96f26c2f258",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "etHzJIZnZUkUdoPK",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "lewnuyda@gmail.com",
+        "subject": "=New Feedback from {{ $('Webhook').item.json.body.name }}",
+        "message": "=<h2>📩 New Feedback Received!</h2>\n\n<p><strong>👤 Name:</strong> {{ $('Webhook').item.json.body.name }}</p>\n<p><strong>📧 Email:</strong> {{ $('Webhook').item.json.body.email }}</p>\n<p><strong>📧 Topic:</strong> {{ $json.name }}</p>\n<p><strong>💬 Message:</strong> {{ $('Webhook').item.json.body.message }}</p>\n<p style=\"white-space: pre-wrap;\"></p>\n\n<hr />\n<small>Sent via your Feedback Collector App</small>\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1036,
+        -560
+      ],
+      "id": "a747f298-ec8f-45f4-a9f8-1e890b30b31e",
+      "name": "Notify admin for new feedbacks",
+      "webhookId": "d2eaa2db-3429-4ad8-8202-5995985c565e",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "etHzJIZnZUkUdoPK",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Supabase- check if email and topic exists",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Positive Email": {
+      "main": [
+        [
+          {
+            "node": "Supabase- save data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Neutral Email": {
+      "main": [
+        [
+          {
+            "node": "Supabase- save data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Negative Email": {
+      "main": [
+        [
+          {
+            "node": "Supabase- save data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase- check value of topic id": {
+      "main": [
+        [
+          {
+            "node": "Notify admin for new feedbacks",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase- save data": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets- save data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets- save data": {
+      "main": [
+        []
+      ]
+    },
+    "OpenAI- Sentiment analysis": {
+      "main": [
+        [
+          {
+            "node": "Supabase- check value of topic id",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase- check if email and topic exists": {
+      "main": [
+        [
+          {
+            "node": "If- condition if email and topic exists",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If- check if sentiment is positive, neutral or negative": {
+      "main": [
+        [
+          {
+            "node": "Positive Email",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If- if sentiment is negative and neutral",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If- if sentiment is negative and neutral": {
+      "main": [
+        [
+          {
+            "node": "Neutral Email",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Negative Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If- condition if email and topic exists": {
+      "main": [
+        [
+          {
+            "node": "Notify client",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "OpenAI- Sentiment analysis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Notify admin for new feedbacks": {
+      "main": [
+        [
+          {
+            "node": "If- check if sentiment is positive, neutral or negative",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "05b2fe51-24f2-44ba-9957-3fa03aed4386",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b58af9b23ea6503889fbbd334186409b7b2c723202750c8a499d21420144b6fa"
+  },
+  "id": "CBGs45nuwFzxeSyc",
+  "tags": []
+}
