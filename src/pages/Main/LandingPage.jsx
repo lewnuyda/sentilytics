@@ -58,7 +58,7 @@ const LandingPage = () => {
           className="text-lg text-gray-700 max-w-lg mb-8"
           variants={fadeInUp}
         >
-          Sentylitics helps you analyze text data with{" "}
+          Sentilytics helps you analyze text data with{" "}
           <span className="font-medium text-indigo-600">
             AI-powered sentiment analysis
           </span>{" "}
