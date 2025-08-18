@@ -13,6 +13,7 @@ const TextInput = React.forwardRef(
       placeholder,
       error = false,
       errorMessage = "",
+      autoComplete = "off", // ✅ Dynamic and default to "off"
       ...rest
     },
     ref
@@ -28,7 +29,8 @@ const TextInput = React.forwardRef(
           placeholder={placeholder}
           error={error}
           crossOrigin=""
-          inputRef={ref} // important for react-hook-form
+          autoComplete={autoComplete} // ✅ Dynamic prop usage
+          inputRef={ref}
           {...rest}
         />
         {error && errorMessage && (

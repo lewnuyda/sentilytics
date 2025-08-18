@@ -130,6 +130,7 @@ const Sentilytics = () => {
             <TextInput
               label="Name"
               name="name"
+              autoComplete="off"
               {...register("name")}
               error={!!errors.name}
               errorMessage={errors.name?.message}
@@ -141,6 +142,7 @@ const Sentilytics = () => {
               label="Email"
               name="email"
               type="email"
+              autoComplete="off"
               {...register("email")}
               error={!!errors.email}
               errorMessage={errors.email?.message}
