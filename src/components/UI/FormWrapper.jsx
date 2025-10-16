@@ -1,8 +1,13 @@
-// src/components/FormWrapper.jsx
+// src/components/UI/FormWrapper.jsx
 import React from "react";
 
-const FormWrapper = ({ onSubmit, children, className = "" }) => (
-  <form onSubmit={onSubmit} className={className}>
+const FormWrapper = ({
+  onSubmit,
+  children,
+  className = "",
+  noValidate = false,
+}) => (
+  <form onSubmit={onSubmit} className={className} noValidate={noValidate}>
     {children}
   </form>
 );
