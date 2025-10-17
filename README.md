@@ -7,7 +7,7 @@ This repository includes both the frontend (React) and exported n8n workflows fo
 
 ## 🚀 Features
 
-- **Sentiment Detection** – Analyze text input and classify it as **Positive**, **Neutral**, or **Negative** using OpenAI.
+- **Sentiment Detection** – Analyze text input and classify it as **Positive**, **Neutral** , or **Negative** using OpenAI.
 - **n8n Integration** – Automates sentiment classification and data handling through visual workflows.
 - **Real-Time Alerts** – Email notifications are sent for all sentiment responses (Positive, Neutral, or Negative) via the Gmail API.
 - **Data Storage** – Saves feedback to **Supabase** and **Google Sheets** through automated workflows.
