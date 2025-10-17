@@ -1,0 +1,31 @@
+name: Frontend CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: Run Vitest on Frontend
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Checkout your repository code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2️⃣ Setup Node.js (use version same as your local setup)
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # 3️⃣ Install all dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # 4️⃣ Run Vitest tests in CI mode (non-watch)
+      - name: Run Vitest tests
+        run: npm run test:ci
