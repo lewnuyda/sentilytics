@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import "@testing-library/jest-dom";
 import { vi } from "vitest";
-import Login from "../../pages/Auth/Login";
+import Login from "../pages/Auth/Login";
 
 // 🧩 Mock SweetAlert2 (default export)
 vi.mock("sweetalert2", () => ({
@@ -13,7 +13,7 @@ vi.mock("sweetalert2", () => ({
 }));
 
 // 🧩 Mock Supabase client
-vi.mock("../../api/supabaseClient", () => ({
+vi.mock("../api/supabaseClient.js", () => ({
   supabase: {
     auth: {
       signInWithPassword: vi.fn(),
@@ -32,7 +32,7 @@ vi.mock("react-router-dom", async () => {
 });
 
 import Swal from "sweetalert2";
-import { supabase } from "../../api/supabaseClient";
+import { supabase } from "../api/supabaseClient";
 
 describe("Login Component", () => {
   beforeEach(() => {
