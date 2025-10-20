@@ -131,9 +131,11 @@ const Sentilytics = () => {
               label="Name"
               name="name"
               autoComplete="off"
+              placeholder="Enter your name"
               {...register("name")}
               error={!!errors.name}
               errorMessage={errors.name?.message}
+              data-testid="name-input" // ✅ added
             />
           </div>
 
@@ -142,10 +144,12 @@ const Sentilytics = () => {
               label="Email"
               name="email"
               type="email"
+              placeholder="Enter your email"
               autoComplete="off"
               {...register("email")}
               error={!!errors.email}
               errorMessage={errors.email?.message}
+              data-testid="email-input" // ✅ added
             />
           </div>
 
@@ -165,6 +169,8 @@ const Sentilytics = () => {
                     error={!!errors.topic}
                     errorMessage={errors.topic?.message}
                     className="w-full"
+                    aria-label="topic"
+                    data-testid="topic-select" // ✅ added
                   />
                 )}
               />
@@ -173,12 +179,14 @@ const Sentilytics = () => {
             )}
           </div>
 
-          <div className="relative w-full min-w-[200px] mb-5">
+          <div className="relative w-full min-w-[200px] mb-5 mt-5">
             <TextArea
               name="message"
               label="Message"
+              aria-label="Message"
               {...register("message")}
-              error={errors.message} // Pass the object, not just boolean
+              error={errors.message}
+              data-testid="message-input" // ✅ added
             />
           </div>
         </div>
@@ -187,7 +195,8 @@ const Sentilytics = () => {
           <AppButton
             className="bg-blue-800 hover:bg-blue-900 text-white"
             type="submit"
-            loading={loading} // Pass loading state
+            loading={loading}
+            data-testid="submit-button" // ✅ added
           >
             Submit
           </AppButton>

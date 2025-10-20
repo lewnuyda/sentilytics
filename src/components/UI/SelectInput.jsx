@@ -1,5 +1,4 @@
 import React from "react";
-import { Select, Option } from "@material-tailwind/react";
 
 const SelectInput = ({
   label = "Select Option",
@@ -10,22 +9,33 @@ const SelectInput = ({
   error = false,
   errorMessage = "",
   className = "w-full",
+  "data-testid": dataTestId,
+  ...rest // collect any additional props
 }) => {
   return (
     <div className={className}>
-      <Select
-        label={label}
+      <label htmlFor={name} className="block mb-1 font-medium">
+        {label}
+      </label>
+      <select
+        id={name}
+        name={name}
         value={value}
         onChange={onChange}
-        error={error} // Material Tailwind uses this for red border
+        data-testid={dataTestId}
+        className={`w-full border rounded p-2 ${
+          error ? "border-red-500" : "border-gray-300"
+        }`}
+        {...rest} // spread any additional props here
       >
-        {options.map((item, index) => (
-          <Option key={index} value={item.value ?? item}>
-            {item.label ?? item}
-          </Option>
+        <option value="">Select {label}</option>
+        {options.map((opt) => (
+          <option key={opt.value} value={opt.value}>
+            {opt.label}
+          </option>
         ))}
-      </Select>
-      {error && <p className="mt-1 text-sm text-red-500">{errorMessage}</p>}
+      </select>
+      {error && <p className="text-red-500 text-sm">{errorMessage}</p>}
     </div>
   );
 };
