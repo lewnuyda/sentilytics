@@ -5,7 +5,7 @@ import "@testing-library/jest-dom";
 import { vi } from "vitest";
 import Login from "../pages/Auth/Login";
 
-// 🧩 Mock SweetAlert2 (default export)
+// 🧩 Mock SweetAlert2
 vi.mock("sweetalert2", () => ({
   default: {
     fire: vi.fn().mockResolvedValue({ isConfirmed: true }),
@@ -39,22 +39,16 @@ describe("Login Component", () => {
     vi.clearAllMocks();
   });
 
-  test("renders email, password, and button", () => {
+  test("renders email, password, and button", async () => {
     render(
       <MemoryRouter>
         <Login />
       </MemoryRouter>
     );
 
-    expect(
-      screen.getByPlaceholderText(/enter your email/i)
-    ).toBeInTheDocument();
-    expect(
-      screen.getByPlaceholderText(/enter your password/i)
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: /sign in/i })
-    ).toBeInTheDocument();
+    expect(screen.getByTestId("email-input")).toBeInTheDocument();
+    expect(screen.getByTestId("password-input")).toBeInTheDocument();
+    expect(screen.getByTestId("login-button")).toBeInTheDocument();
   });
 
   test("shows validation errors when fields are empty", async () => {
@@ -64,8 +58,8 @@ describe("Login Component", () => {
       </MemoryRouter>
     );
 
-    const loginButton = screen.getByRole("button", { name: /sign in/i });
-    await userEvent.click(loginButton);
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId("login-button"));
 
     expect(await screen.findByText(/email is required/i)).toBeInTheDocument();
     expect(
@@ -86,17 +80,10 @@ describe("Login Component", () => {
       </MemoryRouter>
     );
 
-    await userEvent.type(
-      screen.getByPlaceholderText(/enter your email/i),
-      "test@example.com"
-    );
-    await userEvent.type(
-      screen.getByPlaceholderText(/enter your password/i),
-      "password123"
-    );
-
-    const loginButton = screen.getByRole("button", { name: /sign in/i });
-    await userEvent.click(loginButton);
+    const user = userEvent.setup();
+    await user.type(screen.getByTestId("email-input"), "test@example.com");
+    await user.type(screen.getByTestId("password-input"), "password123");
+    await user.click(screen.getByTestId("login-button"));
 
     await waitFor(() => {
       expect(Swal.fire).toHaveBeenCalledWith(
@@ -123,17 +110,10 @@ describe("Login Component", () => {
       </MemoryRouter>
     );
 
-    await userEvent.type(
-      screen.getByPlaceholderText(/enter your email/i),
-      "wrong@example.com"
-    );
-    await userEvent.type(
-      screen.getByPlaceholderText(/enter your password/i),
-      "wrongpass"
-    );
-
-    const loginButton = screen.getByRole("button", { name: /sign in/i });
-    await userEvent.click(loginButton);
+    const user = userEvent.setup();
+    await user.type(screen.getByTestId("email-input"), "wrong@example.com");
+    await user.type(screen.getByTestId("password-input"), "wrongpass");
+    await user.click(screen.getByTestId("login-button"));
 
     await waitFor(() => {
       expect(Swal.fire).toHaveBeenCalledWith(

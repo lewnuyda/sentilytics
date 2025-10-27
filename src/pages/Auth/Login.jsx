@@ -103,6 +103,7 @@ const Login = () => {
         {/* Inputs */}
         <div className="flex flex-col gap-4 p-6">
           <TextInput
+            data-testid="email-input"
             label="Email"
             type="email"
             placeholder="Enter your email"
@@ -112,6 +113,7 @@ const Login = () => {
           />
 
           <TextInput
+            data-testid="password-input"
             label="Password"
             type="password"
             placeholder="Enter your password"
@@ -133,6 +135,7 @@ const Login = () => {
         {/* Submit Button */}
         <div className="p-6 pt-0">
           <AppButton
+            data-testid="login-button"
             className="bg-blue-800 hover:bg-blue-900 text-white"
             type="submit"
             disabled={isSubmitting}
