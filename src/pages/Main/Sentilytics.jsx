@@ -15,6 +15,7 @@ import { showToast } from "../../components/Utils/sweetToast";
 import Swal from "sweetalert2";
 import { supabase } from "../../api/supabaseClient";
 import { useNavigate } from "react-router-dom";
+import useFeedbackTopics from "../../hooks/useFeedbackTopics";
 
 // Validation schema using Yup
 const schema = Yup.object().shape({
@@ -33,27 +34,13 @@ const Sentilytics = () => {
   useEffect(() => {
     document.title = "Feedback - Sentilytics";
   }, []);
-  // ✅ State for dynamic topics
-  const [topicOptions, setTopicOptions] = useState([]);
 
-  // ✅ Fetch from Supabase
-  useEffect(() => {
-    const fetchTopics = async () => {
-      const { data, error } = await supabase
-        .from("feedback_topics")
-        .select("id, name");
-
-      const formattedOptions =
-        data?.map((item) => ({
-          value: item.id,
-          label: item.name,
-        })) || [];
-
-      setTopicOptions(formattedOptions);
-    };
-
-    fetchTopics();
-  }, []);
+  // ✅ Dynamic topics via custom hook
+  const {
+    topics: topicOptions,
+    loading: topicsLoading,
+    error: topicsError,
+  } = useFeedbackTopics();
 
   const {
     register,
@@ -153,8 +140,13 @@ const Sentilytics = () => {
             />
           </div>
 
+          {/* Topic */}
           <div className="relative h-11 w-full min-w-[200px] mb-5">
-            {topicOptions.length > 0 ? (
+            {topicsLoading ? (
+              <p className="text-sm text-gray-500">Loading topics...</p>
+            ) : topicsError ? (
+              <p className="text-sm text-red-500">Error loading topics.</p>
+            ) : (
               <Controller
                 name="topic"
                 control={control}
@@ -170,12 +162,10 @@ const Sentilytics = () => {
                     errorMessage={errors.topic?.message}
                     className="w-full"
                     aria-label="topic"
-                    data-testid="topic-select" // ✅ added
+                    data-testid="topic-select"
                   />
                 )}
               />
-            ) : (
-              <p className="text-sm text-gray-500">Loading topics...</p>
             )}
           </div>
 
