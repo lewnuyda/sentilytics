@@ -11,16 +11,17 @@ export default function useFeedbackTopics() {
       try {
         const { data, error } = await supabase
           .from("feedback_topics")
-          .select("id, name")
-          .order("name", { ascending: true });
+          .select("id, name");
 
         if (error) throw error;
 
         const formatted =
-          data?.map((item) => ({
-            value: item.id,
-            label: item.name,
-          })) || [];
+          data
+            ?.map((item) => ({
+              value: item.id,
+              label: item.name,
+            }))
+            .sort((a, b) => a.label.localeCompare(b.label)) || [];
 
         setTopics(formatted);
       } catch (err) {
